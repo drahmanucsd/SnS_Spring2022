@@ -6,6 +6,7 @@ from tkinter.ttk import Scrollbar
 import os
 import csv
 import ntpath
+import pandas as pd
 
 # variables
 new_rows = []
@@ -198,6 +199,9 @@ def download():
         for i in new_rows:
             if i[4] != 'DELETE':
                 new_data.writerow(i)
+    print(save_path)
+    read_file = pd.read_csv (save_path)
+    read_file.to_excel (save_path[:-3]+'xls', index = None, header=True)
 
 # checks if a file has been uploaded
 def is_file_uploaded():
