@@ -153,7 +153,6 @@ def categorize_revenue():
                 item_type.append("Item Type")
                 line_count += 1
             else:
-                print(str(row[4]))
                 if '(M)' in str(row[4]) or '12 services' in str(row[4]) or '24 services' in str(row[4])\
                     or 'Transcend Annual Non-Medical Combo Credit' in str(row[4]) or 'Transcend Annual Medical Combo Credit' in str(row[4])\
                     or 'Nourish Annual Medical Credit' in str(row[4]):
@@ -193,7 +192,7 @@ def categorize_revenue():
 
 # handler for 'Download' button click
 def download():
-    save_path = filedialog.asksaveasfilename(filetypes=(('csv files','*.csv'),))
+    save_path = filedialog.asksaveasfilename(filetypes=(('csv files','*.csv'),)) + '.csv'
     with open(save_path,mode='w') as new_csv_file:
         new_data = csv.writer(new_csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for i in new_rows:

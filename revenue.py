@@ -190,18 +190,22 @@ def categorize_revenue():
     with open('membership_data.txt','w') as f:
             for elem in member_IDs:
                 f.write(elem + '\n')
+    
+    xfile = pd.read_csv(csv_file)
+    xfile.to_excel(csv_file, index = None, header=True)
+    
+    print(xfile)
+    
 
 # handler for 'Download' button click
 def download():
-    save_path = filedialog.asksaveasfilename(filetypes=(('csv files','*.csv'),))
+    save_path = filedialog.asksaveasfilename(filetypes=(('excel files', '*.xls'), ('excel files', '*.xlsx'))) + '.xls'
     with open(save_path,mode='w') as new_csv_file:
         new_data = csv.writer(new_csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for i in new_rows:
             if i[4] != 'DELETE':
                 new_data.writerow(i)
-    print(save_path)
-    read_file = pd.read_csv (save_path)
-    read_file.to_excel (save_path[:-3]+'xls', index = None, header=True)
+    
 
 # checks if a file has been uploaded
 def is_file_uploaded():

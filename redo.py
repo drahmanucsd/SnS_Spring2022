@@ -6,15 +6,24 @@ from tkinter.ttk import Scrollbar
 import os
 import csv
 import ntpath
-
 import pandas as pd
-from cryptography.fernet import Fernet
 
+
+
+from tkinter import *
+from tkinter import filedialog
+from tkinter import font
+from tkinter.ttk import Progressbar
+from tkinter.ttk import Scrollbar
+import os
+import csv
+import ntpath
+import pandas as pd
 
 # variables
 new_rows = []
 item_type = []
-correct_format1 = ['Sale Date', 'Client ID', 'Client', 'Sale ID', 'Item name', 'Batch #', 'Sales Notes', 'Location', 'Unnamed: 8', 'Color', 'Size', 'Item price', 'Quantity', 'Subtotal', 'Discount %', 'Discount amount', 'Tax', 'Item Total', 'Total Paid w/ Payment Method', 'Payment Method']
+correct_format1 = ['Sale Date', 'Client ID', 'Client', 'Sale ID', 'Item name', 'Batch #', 'Sales Notes', 'Location', '', 'Color', 'Size', 'Item price', 'Quantity', 'Subtotal', 'Discount %', 'Discount amount', 'Tax', 'Item Total', 'Total Paid w/ Payment Method', 'Payment Method']
 correct_format2 =['\ufeffSale Date', 'Client ID', 'Client', 'Sale ID', 'Item name', 'Batch #', 'Sales Notes', 'Location', '', 'Color', 'Size', 'Item price', 'Quantity', 'Subtotal', 'Discount %', 'Discount amount', 'Tax', 'Item Total', 'Total Paid w/ Payment Method', 'Payment Method']
 has_previewed = False
 member_IDs = ['100008243', '834', '1,288', '100008192', '100008373', '6,705', '3,173', '100003950', '4,984', '4,464', 
@@ -36,7 +45,6 @@ member_IDs = ['100008243', '834', '1,288', '100008192', '100008373', '6,705', '3
     '2,804', '5,622', '6,168', '3,014', '5,438', '4,957', '100007313', '100008205', '5,656', '100007902', '6,613', '5,532', 
     '4,158', '6,945', '3,475', '100007580', '5,508', '4,065', '6,805', '3,017', '3,833', '100006809', '5,783', '100006872', 
     '5,356', '4,311', '6,835']
-    
 file_exists = os.path.exists('membership_data.txt')
 
 #write membership IDs data to text file
@@ -81,64 +89,41 @@ canvas.pack(side='left')
 canvas.create_window((0,0),window=frame4,anchor='nw')
 frame4.bind("<Configure>",scroll)
 
-# initialize csv_file as a global variable
+# initialize xfile as a global variable
+xfile = None
 csv_file = None
 
 # handler for 'Choose File' button click event
-def open_csv():
-    global csv_file
-    csv_file = filedialog.askopenfilename(title='open a file',filetypes=(('excel files', '*.xls'), ('excel files', '*.xlsx'),('csv files','*.csv')))
-    
-    extension = csv_file[csv_file.index('.'):]
-    
-    if 'xls' in extension:
-        pd_convert = pd.read_excel(csv_file)
-        csv_file = csv_file[:csv_file.index('.')+1] + "csv"
-        pd_convert.to_csv(csv_file, index = None, header=True) 
-                
-        # #encryption
-        # encrypt_key = Fernet.generate_key()
-        # with open('filekey.key', 'wb') as filekey:
-        #         filekey.write(encrypt_key)
-        # 
-        # #use generated encrypt_key
-        # fernet = Fernet(encrypt_key)
-        # encryption = fernet.encrypt(bytes(csv_file, 'utf-8'))
-        # 
-        # #actually encryption
-        # with open(csv_file, 'wb') as to_encrypt:
-        #     to_encrypt.write(encryption)        
-            
+def open_xfile():
+    global xfile
+    xfile = filedialog.askopenfilename(title='open a file',filetypes=(('excel files','*.xls'),('excel files','*.xlsx')))
     filename = ''
-    if len(ntpath.basename(csv_file)) > 25:
+    if len(ntpath.basename(xfile)) > 25:
         filename = ntpath.basename(csv_file)[:25]+'...'
     else:
-        filename = ntpath.basename(csv_file)
+        filename = ntpath.basename(xfile)
     lbl_filename.config(text=filename,fg='grey')
-
+    
 # handler for 'Start' button click event
 def start(): 
     if is_file_uploaded() == False:
         return None
-    if verify_columns() == False:
-        lbl_message.config(text='Incorrect file format',fg='red')
-        return None
+    # if verify_columns() == False:
+    #     lbl_message.config(text='Incorrect file format',fg='red')
+    #     return None
     categorize_revenue()
     btn_download.pack(padx=10,pady=10)
-
-# verifies that the input CSV is in the correct format
-def verify_columns():
-    with open(csv_file) as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
-        file_format = list(csv_reader)[0]
-        if file_format != correct_format1 and file_format != correct_format2:
-            print(file_format)
-            print()
-            print(file_format == ['Sale Date', 'Client ID', 'Client', 'Sale ID', 'Item name', 'Batch #', 'Sales Notes', 'Location', '', 'Color', 'Size', 'Item price', 'Quantity', 'Subtotal', 'Discount %', 'Discount amount', 'Tax', 'Item Total', 'Total Paid w/ Payment Method', 'Payment Method'])
-            return False
-        else:
-            return True
-
+    
+# checks if a file has been uploaded
+def is_file_uploaded():
+    if xfile != None:
+        lbl_message.config(text='Click \'Download\' to save your file',fg='green')
+        return True
+    else:
+        lbl_message.config(text='You need to upload a file first',fg='red')
+        return False
+        
+        
 # handler for 'Start' button click event
 def preview():
     if is_file_uploaded() == False:
@@ -171,90 +156,107 @@ def preview():
     if has_previewed == False:
         has_previewed = True
 
-check = True
-def member_append(mem):
-    if mem in member_IDs:
-        item_type.append('Membership - Renewal')
-    else:
-        item_type.append('Membership - New')
-        member_IDs.append(mem)
-    check = False
 
-# revenue categorization function
 def categorize_revenue():
-    with open(csv_file) as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
-        rows = [row for row in csv_reader] #turns CSV into a list
-        line_count = 0
-        for row in rows:
-            if line_count == 0:
-                item_type.append("Item Type")
-                line_count += 1
+    global xfile
+    xfile = pd.read_excel(xfile)
+    xfile.to_excel('temp.xlsx', index = None, header = True)
+    
+    xfile.insert(5, 'Item Type', ['empty']*xfile.shape[0])
+    item_name = xfile[xfile.columns[4]]
+    item_type = xfile[xfile.columns[5]]
+    
+    #catgeories for item names
+    members = ['(M)','12 services', '24 services', 'Transcend Annual Non-Medical Combo Credit', 'Transcend Annual Medical Combo Credit', 'Nourish Annual Medical Credit']
+    
+    appoints = ['(A)', 'Service Credit', 'Acupuncture', '2 services', '1 service', 'Complimentary Consultation', 'Appointment', 'Sacred Sunday Members']
+    
+    events = ['(E)', 'Moon Circle', 'Sunset Horseback Riding', 'Sunset Turtle Releasing Ceremony', 'Getaway', 'Drop In', 'Reiki', 'Sacred Sunday Drop In', 'Sacred Sunday Non-Member']
+    
+    retails = ['(R)', '(S)']
+    
+    corps = ['(C)']
+    
+    consults = ['Client Consultation']
+    
+    deletions = ['(D)', 'Internal Meeting Non Member', '$150 Membership Pricing', '$125 Membership Pricing', '$100 Membership Pricing']
+        
+    #categorize based on lists above
+    for index in range(len(item_name)):
+        service = item_name[index]
+        if service in members:
+            id = xfile[xfile.columns[1]]
+            if xfile.at[index, 'Client ID'] in member_IDs:
+                #xfile[xfile.columns[5]][index] = 'Membership - Renewal'
+                xfile.at[index, 'Item Type'] = 'Membership - Renewal'
+                 
             else:
-                check = True
-                member_cat = ['(M)','12 services', '24 services','Transcend Annual Non-Medical Combo Credit', 'Transcend Annual Medical Combo Credit', 'Nourish Annual Medical Credit']
-                [member_append(str(row[1])) for cat in member_cat if cat in str(row[4]) and check]
+                member_IDs.append(id)
+                #xfile[xfile.columns[5]][index] = 'Membership - New'
+                xfile.at[index, 'Item Type'] = 'Membership - New'
                 
-                if '(A)' in str(row[4]) or 'Service Credit' in str(row[4]) or 'Acupuncture' in str(row[4])\
-                    or '2 services' in str(row[4]) or '1 service' in str(row[4]) \
-                    or 'Complimentary Consultation' in str(row[4]) or 'Appointment' in str(row[4])\
-                    or 'Sacred Sunday Members' in str(row[4]): #need to double check sacred sunday
-                    item_type.append('Appointment')
-                elif '(E)' in str(row[4]) or 'Moon Circle' in str(row[4]) or 'Sunset Horseback Riding' in str(row[4])\
-                    or 'Sunset Turtle Releasing Ceremony' in str(row[4]) or 'Getaway' in str(row[4])\
-                    or 'Drop In' in str(row[4]) or 'Reiki'  in str(row[4])\
-                    or 'Sacred Sunday Drop In' in str(row[4]) or 'Sacred Sunday Non-Member' in str(row[4]): #need to double check sacred sunday
-                    item_type.append('Event')
-                elif '(R)' in str(row[4]) or '(S)' in str(row[4]):
-                    item_type.append('Retail')
-                elif '(C)' in str(row[4]):
-                    item_type.append('Corporate Event')
-                elif '(D)' in str(row[4]) or 'Internal Meeting Non Member' in str(row[4]) or '$150 Membership Pricing' in str(row[4])\
-                    or '$125 Membership Pricing' in str(row[4]) or '$100 Membership Pricing' in str(row[4]):
-                    item_type.append('DELETE')
-                elif str(row[4]) == 'Client Consultation':
-                    item_type.append('Consultation')
-                else:
-                    item_type.append('UNCATEGORIZED')
-                line_count += 1
-            new_rows.append(row[0:4] + [item_type[line_count-1]] + row[4:])
-            progress_bar['value'] += (1/len(rows))*100
+            
+        elif service in appoints:
+            # xfile[xfile.columns[5]][index] = 'Appointment'
+            xfile.at[index, 'Item Type'] = 'Appointment'
+            
+            
+        elif service in events:
+            # xfile[xfile.columns[5]][index] = 'Event'
+            xfile.at[index, 'Item Type'] = 'Event'
+            
+        elif service in retails:
+            # xfile[xfile.columns[5]][index] = 'Retail'
+            xfile.at[index, 'Item Type'] = 'Retail'
+        
+        elif service in corps:
+            # xfile[xfile.columns[5]][index] = 'Corporate Event'
+            xfile.at[index, 'Item Type'] = 'Corporate Event'
+            
+        elif service in deletions:
+            # xfile[xfile.columns[5]][index] = 'DELETE'
+            xfile.at[index, 'Item Type'] = 'DELETE'
+            #xfile = xfile.drop(xfile.index[index])
+            #print(xfile.loc[index, xfile.columns[4]])
+        
+        elif service in consults:
+            # xfile[xfile.columns[5]][index] = 'Consultation'
+            xfile.at[index, 'Item Type'] = 'Consultation'
+    
+        else:
+            # xfile[xfile.columns[5]][index] = 'UNCATEGORIZED'
+            xfile.at[index, 'Item Type'] = 'UNCATEGORIZED'
+        
+        
+    # categorized = pd.DataFrame(columns = xfile.columns)
+    # 
+    # for row in range(xfile.shape[0]):
+    #     if xfile.at[row, 'Item Type'] != 'DELETE':
+    #         categorized = categorized.append(xfile.iloc[row])
+    # 
+    #print(categorized)
+    
     #write out new member ID data
     with open('membership_data.txt','w') as f:
             for elem in member_IDs:
                 f.write(elem + '\n')
-
+                
+    # print(xfile)
+    
 # handler for 'Download' button click
 def download():
-    save_path = filedialog.asksaveasfilename(filetypes=(('csv files','*.csv'),))
-    with open(save_path,mode='w') as new_csv_file:
-        new_data = csv.writer(new_csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for i in new_rows:
-            if i[4] != 'DELETE':
-                new_data.writerow(i)
-    print(save_path)
-    read_file = pd.read_csv (save_path)
-    read_file.to_excel (save_path[:-3]+'xls', index = None, header=True)
-
-# checks if a file has been uploaded
-def is_file_uploaded():
-    if csv_file != None:
-        lbl_message.config(text='Click \'Download\' to save your file',fg='green')
-        return True
-    else:
-        lbl_message.config(text='You need to upload a file first',fg='red')
-        return False
-
-def clearFrame(frm):
-    for widgets in frm.winfo_children():
-        widgets.destroy()
+    save_path = filedialog.asksaveasfilename(filetypes=(('excel files' ,'*.xls'))) + '.xls'
+    
+    final = pd.read_csv(xfile)
+    final.to_excel(save_path, index = None, header=True)
+        
 
 # create widgets (labels, buttons, progress bar, scroll bar)
 lbl_title = Label(master=frame1,font=('Arial',25,'bold'),text='Revenue Categorization Script',fg='black',bg='#4CB963')
 lbl_filename = Label(master=frame2,text='No File Chosen',fg='grey',width=20,anchor='w')
 lbl_message = Label(master=frame6,text='*Please upload a file')
 
-btn_choosefile = Button(master=frame2,text='Choose File',command=open_csv)
+btn_choosefile = Button(master=frame2,text='Choose File',command=open_xfile)
 btn_start = Button(master=frame2,text='Start',command=start)
 btn_preview = Button(master=frame2,text='Preview',command=preview)
 btn_download = Button(master=frame3,text='Download',command=download)
