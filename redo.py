@@ -99,10 +99,11 @@ def open_xfile():
     global xfile
     xfile = filedialog.askopenfilename(title='open a file',filetypes=(('excel files','*.xls'),('excel files','*.xlsx')))
     filename = ''
-    if len(ntpath.basename(xfile)) > 25:
-        filename = ntpath.basename(csv_file)[:25]+'...'
-    else:
-        filename = ntpath.basename(xfile)
+    # if len(ntpath.basename(xfile)) > 25:
+    #     filename = ntpath.basename(csv_file)[:25]+'...'
+    # else:
+    #     filename = ntpath.basename(xfile)
+    filename = ntpath.basename(xfile)
     lbl_filename.config(text=filename,fg='grey')
     
 # handler for 'Start' button click event
