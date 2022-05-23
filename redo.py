@@ -105,6 +105,7 @@ def open_xfile():
     #     filename = ntpath.basename(xfile)
     filename = ntpath.basename(xfile)
     lbl_filename.config(text=filename,fg='grey')
+    start()
     
 # handler for 'Start' button click event
 def start(): 
@@ -114,7 +115,7 @@ def start():
     #     lbl_message.config(text='Incorrect file format',fg='red')
     #     return None
     categorize_revenue()
-    btn_download.pack(padx=10,pady=10)
+    #btn_download.pack(padx=10,pady=10)
     
 # checks if a file has been uploaded
 def is_file_uploaded():
@@ -248,7 +249,7 @@ def categorize_revenue():
             for elem in member_IDs:
                 f.write(elem + '\n')
     xfile.to_excel(output, index = None, header = True)           
-    # print(xfile)
+    print(xfile)
     
 # handler for 'Download' button click
 def download():
