@@ -180,11 +180,14 @@ def categorize_revenue():
     consults = ['Client Consultation']
     
     deletions = ['(D)', 'Internal Meeting Non Member', '$150 Membership Pricing', '$125 Membership Pricing', '$100 Membership Pricing']
-        
+    
+    # print(item_name)
     #categorize based on lists above
     for index in range(len(item_name)):
         service = item_name[index]
-        if service in members:
+        # print()
+        print(service)
+        if any(cat in service for cat in members):
             id = xfile[xfile.columns[1]]
             if xfile.at[index, 'Client ID'] in member_IDs:
                 #xfile[xfile.columns[5]][index] = 'Membership - Renewal'
@@ -196,30 +199,30 @@ def categorize_revenue():
                 xfile.at[index, 'Item Type'] = 'Membership - New'
                 
             
-        elif service in appoints:
+        elif any(cat in service for cat in appoints):
             # xfile[xfile.columns[5]][index] = 'Appointment'
             xfile.at[index, 'Item Type'] = 'Appointment'
             
             
-        elif service in events:
+        elif any(cat in service for cat in events):
             # xfile[xfile.columns[5]][index] = 'Event'
             xfile.at[index, 'Item Type'] = 'Event'
             
-        elif service in retails:
+        elif any(cat in service for cat in retails):
             # xfile[xfile.columns[5]][index] = 'Retail'
             xfile.at[index, 'Item Type'] = 'Retail'
         
-        elif service in corps:
+        elif any(cat in service for cat in corps):
             # xfile[xfile.columns[5]][index] = 'Corporate Event'
             xfile.at[index, 'Item Type'] = 'Corporate Event'
             
-        elif service in deletions:
+        elif any(cat in service for cat in deletions):
             # xfile[xfile.columns[5]][index] = 'DELETE'
             xfile.at[index, 'Item Type'] = 'DELETE'
             #xfile = xfile.drop(xfile.index[index])
             #print(xfile.loc[index, xfile.columns[4]])
         
-        elif service in consults:
+        elif any(cat in service for cat in consults):
             # xfile[xfile.columns[5]][index] = 'Consultation'
             xfile.at[index, 'Item Type'] = 'Consultation'
     
@@ -236,6 +239,7 @@ def categorize_revenue():
     # 
     #print(categorized)
     
+    print(xfile[xfile.columns[5]])
     #write out new member ID data
     with open('membership_data.txt','w') as f:
             for elem in member_IDs:
