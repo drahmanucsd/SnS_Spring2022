@@ -62,32 +62,33 @@ else:
 #main window
 window = Tk()
 window.title("Revenue Categorization")
-window.geometry('700x480')
+window.geometry('600x300')
+window.config(bg='#ffffff')
 
 # frames
-frame1 = Frame(bg='#4CB963') # holds the title
+frame1 = Frame(bg='#3b84f8') # holds the title
 frame1.pack(fill='x')
-frame6 = Frame() # holds the interactive message
+frame6 = Frame(bg='#ffffff') # holds the interactive message
 frame6.pack()
-frame2 = Frame() # holds the choose file, preview, and start buttons
+frame2 = Frame(bg='#ffffff') # holds the choose file, preview, and start buttons
 frame2.pack()
-frame3 = Frame(bg='#D3D3D3') # holds the progress bar
+frame3 = Frame(bg='#ffffff') # holds the progress bar
 frame3.pack(fill='x')
-frame5 = Frame() # holds the scroll bar and frame 4
-frame5.pack()
+# frame5 = Frame(bg='#ffffff') # holds the scroll bar and frame 4
+# frame5.pack()
 
 # scroll bar and preview file frame
 def scroll(event):
-    canvas.configure(scrollregion=canvas.bbox("all"),width=600,height=200)
+    canvas.configure(scrollregion=canvas.bbox("all"),width=600,height=200,bg='#ffffff')
 
-canvas=Canvas(master=frame5)
-frame4 = Frame(master=canvas,borderwidth=3,relief=SOLID) # holds the preview
-scroll_bar = Scrollbar(master=frame5,orient="horizontal",command=canvas.xview)
-canvas.configure(xscrollcommand=scroll_bar.set)
-scroll_bar.pack(fill="x")
-canvas.pack(side='left')
-canvas.create_window((0,0),window=frame4,anchor='nw')
-frame4.bind("<Configure>",scroll)
+# canvas=Canvas(master=frame5,bg='#ffffff')
+# frame4 = Frame(master=canvas,borderwidth=3,relief=SOLID) # holds the preview
+# scroll_bar = Scrollbar(master=frame5,orient="horizontal",command=canvas.xview)
+# canvas.configure(xscrollcommand=scroll_bar.set)
+# scroll_bar.pack(fill="x")
+# canvas.pack(side='left')
+# canvas.create_window((0,0),window=frame4,anchor='nw')
+# frame4.bind("<Configure>",scroll)
 
 # initialize xfile as a global variable
 xfile = None
@@ -159,8 +160,9 @@ def preview():
 
 def categorize_revenue():
     global xfile
+    output = xfile
     xfile = pd.read_excel(xfile)
-    xfile.to_excel('temp.xlsx', index = None, header = True)
+    # xfile.to_excel('temp.xlsx', index = None, header = True)
     
     xfile.insert(5, 'Item Type', ['empty']*xfile.shape[0])
     item_name = xfile[xfile.columns[4]]
@@ -244,7 +246,7 @@ def categorize_revenue():
     with open('membership_data.txt','w') as f:
             for elem in member_IDs:
                 f.write(elem + '\n')
-                
+    xfile.to_excel(output, index = None, header = True)           
     # print(xfile)
     
 # handler for 'Download' button click
@@ -255,19 +257,19 @@ def download():
     final.to_excel(save_path, index = None, header=True)
         
 
-# create widgets (labels, buttons, progress bar, scroll bar)
-lbl_title = Label(master=frame1,font=('Arial',25,'bold'),text='Revenue Categorization Script',fg='black',bg='#4CB963')
+# create widgets (labels, buttons, progress bar, scroll bar)3b84f8
+lbl_title = Label(master=frame1,font=('Arial',25,'bold'),text='Revenue Categorization Script',fg='white',bg='#3b84f8')
 lbl_filename = Label(master=frame2,text='No File Chosen',fg='grey',width=20,anchor='w')
-lbl_message = Label(master=frame6,text='*Please upload a file')
+lbl_message = Label(master=frame6,text='*Please upload a file',bg='white', fg='#3b84f8')
 
-btn_choosefile = Button(master=frame2,text='Choose File',command=open_xfile)
-btn_start = Button(master=frame2,text='Start',command=start)
-btn_preview = Button(master=frame2,text='Preview',command=preview)
-btn_download = Button(master=frame3,text='Download',command=download)
+btn_choosefile = Button(master=frame2,text='Choose File',command=open_xfile, fg = "white", font = "Future 10", bg="#3b84f8")
+# btn_start = Button(master=frame2,text='Start',command=start)
+# btn_preview = Button(master=frame2,text='Preview',command=preview)
+# btn_download = Button(master=frame3,text='Download',command=download)
 
-progress_bar = Progressbar(master=frame3, orient=HORIZONTAL, length=250, mode='determinate')
+progress_bar = Progressbar(master=frame3, orient=HORIZONTAL, length=500, mode='determinate')
 
-scroll_bar = Scrollbar(master=frame5, orient='horizontal')
+# scroll_bar = Scrollbar(master=frame5, orient='horizontal')
 
 # pack widgets
 lbl_title.pack(padx=20,pady=20)
@@ -275,8 +277,8 @@ lbl_filename.grid(sticky='w',row=0,column=1,padx=10,pady=10)
 lbl_message.pack(pady=5)
 
 btn_choosefile.grid(sticky='w',row=0,column=0,padx=10,pady=10)
-btn_start.grid(sticky='w',row=1,column=1,padx=10,pady=10)
-btn_preview.grid(sticky='w',row=1,column=0,padx=10,pady=10)
+# btn_start.grid(sticky='w',row=1,column=1,padx=10,pady=10)
+# btn_preview.grid(sticky='w',row=1,column=0,padx=10,pady=10)
 
 progress_bar.pack(padx=10,pady=20,expand=True)
 
