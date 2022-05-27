@@ -105,7 +105,7 @@ def start():
 # checks if a file has been uploaded
 def is_file_uploaded():
     if xfile != None:
-        lbl_message.config(text='Click \'Download\' to save your file',fg='green')
+        lbl_message.config(text='File updated. Close program or add new file',fg='green')
         return True
     else:
         lbl_message.config(text='You need to upload a file first',fg='red')
@@ -151,9 +151,16 @@ def categorize_revenue():
     xfile = pd.read_excel(xfile)
     # xfile.to_excel('temp.xlsx', index = None, header = True)
     
-    xfile.insert(5, 'Item Type', ['empty']*xfile.shape[0])
-    item_name = xfile[xfile.columns[4]]
-    item_type = xfile[xfile.columns[5]]
+    
+    try:
+        item_file_idx = xfile.columns.get_loc('Item name')
+        xfile.insert(item_file_idx+1, 'Item Type', ['empty']*xfile.shape[0])
+    except:
+        lbl_message.config(text='Invalid file. Make sure format is correct',fg='red')
+        return
+    
+    item_name = xfile[xfile.columns[item_file_idx]]
+    item_type = xfile[xfile.columns[item_file_idx+1]]
     
     #catgeories for item names
     members = ['(M)','12 services', '24 services', 'Transcend Annual Non-Medical Combo Credit', 'Transcend Annual Medical Combo Credit', 'Nourish Annual Medical Credit']
@@ -226,7 +233,7 @@ def download():
 
 
 #BELOW IS ALL UI
-# create widgets (labels, buttons, progress bar, scroll bar)3b84f8
+# create widgets (labels, buttons, progress bar, scroll bar)
 lbl_title = Label(master=frame1,font=('Arial',25,'bold'),text='Revenue Categorization Script',fg='white',bg='#3b84f8')
 lbl_filename = Label(master=frame2,text='No File Chosen',fg='grey',width=20,anchor='w')
 lbl_message = Label(master=frame6,text='*Please upload a file',bg='white', fg='#3b84f8')
