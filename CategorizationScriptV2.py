@@ -111,47 +111,15 @@ def is_file_uploaded():
         lbl_message.config(text='You need to upload a file first',fg='red')
         return False
         
-        
-# handler for 'Start' button click event
-def preview():
-    if is_file_uploaded() == False:
-        return None
-    else:
-        lbl_message.config(text='Click \'Start\' to run the script',fg='green')
-    global has_previewed
-    if has_previewed == True:
-        clearFrame(frame4)
-    with open(csv_file) as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=',')
-        rows = [row for row in csv_reader]
-        line_count = 0
-        for i in range(len(rows)):
-            for j in range(len(rows[i])):
-                if line_count == 0:
-                    frame_individual = Frame(master=frame4)
-                    frame_individual.grid(row=i,column=j,sticky='w')
-                    bold_font = font.Font(weight='bold')
-                    lbl_row = Label(master=frame_individual,text=str(rows[i][j]),font=bold_font)
-                    lbl_row.pack()
-                else:
-                    frame_individual = Frame(master=frame4)
-                    frame_individual.grid(row=i,column=j,sticky='w')
-                    lbl_row = Label(master=frame_individual,text=str(rows[i][j]))
-                    lbl_row.pack()
-            line_count+=1
-            if line_count == 6:
-                break
-    if has_previewed == False:
-        has_previewed = True
-
-
+#categorization
 def categorize_revenue():
     global xfile
+    
+    #read filepath and convert to Pandas Dataframe
     output = xfile
     xfile = pd.read_excel(xfile)
-    # xfile.to_excel('temp.xlsx', index = None, header = True)
     
-    
+    #Find column for `Item name` and set following column to `Item Type`
     try:
         item_file_idx = xfile.columns.get_loc('Item name')
         xfile.insert(item_file_idx+1, 'Item Type', ['empty']*xfile.shape[0])
@@ -214,11 +182,12 @@ def categorize_revenue():
         else:
             xfile.at[idx, 'Item Type'] = 'UNCATEGORIZED'
     
-    #write out new member ID data
+    #write out new member ID data to txt file
     with open('membership_data.txt','w') as f:
             for elem in member_IDs:
                 f.write(elem + '\n')
     
+    #Delete any rows with `DELETE` in them
     xfile = xfile.loc[xfile['Item Type'] != 'DELETE']
     
     xfile.to_excel(output, index = None, header = True)           
