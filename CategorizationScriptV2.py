@@ -77,18 +77,6 @@ frame3.pack(fill='x')
 # frame5 = Frame(bg='#ffffff') # holds the scroll bar and frame 4
 # frame5.pack()
 
-# scroll bar and preview file frame
-def scroll(event):
-    canvas.configure(scrollregion=canvas.bbox("all"),width=600,height=200,bg='#ffffff')
-
-# canvas=Canvas(master=frame5,bg='#ffffff')
-# frame4 = Frame(master=canvas,borderwidth=3,relief=SOLID) # holds the preview
-# scroll_bar = Scrollbar(master=frame5,orient="horizontal",command=canvas.xview)
-# canvas.configure(xscrollcommand=scroll_bar.set)
-# scroll_bar.pack(fill="x")
-# canvas.pack(side='left')
-# canvas.create_window((0,0),window=frame4,anchor='nw')
-# frame4.bind("<Configure>",scroll)
 
 # initialize xfile as a global variable
 xfile = None
@@ -111,11 +99,8 @@ def open_xfile():
 def start(): 
     if is_file_uploaded() == False:
         return None
-    # if verify_columns() == False:
-    #     lbl_message.config(text='Incorrect file format',fg='red')
-    #     return None
+
     categorize_revenue()
-    #btn_download.pack(padx=10,pady=10)
     
 # checks if a file has been uploaded
 def is_file_uploaded():
@@ -185,71 +170,51 @@ def categorize_revenue():
     
     deletions = ['(D)', 'Internal Meeting Non Member', '$150 Membership Pricing', '$125 Membership Pricing', '$100 Membership Pricing']
     
-    # print(item_name)
     #categorize based on lists above
-    for index in range(len(item_name)):
-        service = item_name[index]
-        # print()
-        print(service)
+    for idx in range(len(item_name)):
+        service = item_name[idx]
+
         if any(cat in service for cat in members):
             id = xfile[xfile.columns[1]]
-            if xfile.at[index, 'Client ID'] in member_IDs:
-                #xfile[xfile.columns[5]][index] = 'Membership - Renewal'
-                xfile.at[index, 'Item Type'] = 'Membership - Renewal'
+            if xfile.at[idx, 'Client ID'] in member_IDs:
+                xfile.at[idx, 'Item Type'] = 'Membership - Renewal'
                  
             else:
                 member_IDs.append(id)
-                #xfile[xfile.columns[5]][index] = 'Membership - New'
-                xfile.at[index, 'Item Type'] = 'Membership - New'
+                xfile.at[idx, 'Item Type'] = 'Membership - New'
                 
             
         elif any(cat in service for cat in appoints):
-            # xfile[xfile.columns[5]][index] = 'Appointment'
-            xfile.at[index, 'Item Type'] = 'Appointment'
+            xfile.at[idx, 'Item Type'] = 'Appointment'
             
             
         elif any(cat in service for cat in events):
-            # xfile[xfile.columns[5]][index] = 'Event'
-            xfile.at[index, 'Item Type'] = 'Event'
+            xfile.at[idx, 'Item Type'] = 'Event'
             
         elif any(cat in service for cat in retails):
-            # xfile[xfile.columns[5]][index] = 'Retail'
-            xfile.at[index, 'Item Type'] = 'Retail'
+            xfile.at[idx, 'Item Type'] = 'Retail'
         
         elif any(cat in service for cat in corps):
-            # xfile[xfile.columns[5]][index] = 'Corporate Event'
-            xfile.at[index, 'Item Type'] = 'Corporate Event'
+            xfile.at[idx, 'Item Type'] = 'Corporate Event'
             
         elif any(cat in service for cat in deletions):
-            # xfile[xfile.columns[5]][index] = 'DELETE'
-            xfile.at[index, 'Item Type'] = 'DELETE'
-            #xfile = xfile.drop(xfile.index[index])
-            #print(xfile.loc[index, xfile.columns[4]])
+            xfile.at[idx, 'Item Type'] = 'DELETE'
+            # xfile.drop(xfile.index[idx])
         
         elif any(cat in service for cat in consults):
-            # xfile[xfile.columns[5]][index] = 'Consultation'
-            xfile.at[index, 'Item Type'] = 'Consultation'
+            xfile.at[idx, 'Item Type'] = 'Consultation'
     
         else:
-            # xfile[xfile.columns[5]][index] = 'UNCATEGORIZED'
-            xfile.at[index, 'Item Type'] = 'UNCATEGORIZED'
-        
-        
-    # categorized = pd.DataFrame(columns = xfile.columns)
-    # 
-    # for row in range(xfile.shape[0]):
-    #     if xfile.at[row, 'Item Type'] != 'DELETE':
-    #         categorized = categorized.append(xfile.iloc[row])
-    # 
-    #print(categorized)
+            xfile.at[idx, 'Item Type'] = 'UNCATEGORIZED'
     
-    print(xfile[xfile.columns[5]])
     #write out new member ID data
     with open('membership_data.txt','w') as f:
             for elem in member_IDs:
                 f.write(elem + '\n')
+    
+    xfile = xfile.loc[xfile['Item Type'] != 'DELETE']
+    
     xfile.to_excel(output, index = None, header = True)           
-    print(xfile)
     
 # handler for 'Download' button click
 def download():
@@ -259,19 +224,16 @@ def download():
     final.to_excel(save_path, index = None, header=True)
         
 
+
+#BELOW IS ALL UI
 # create widgets (labels, buttons, progress bar, scroll bar)3b84f8
 lbl_title = Label(master=frame1,font=('Arial',25,'bold'),text='Revenue Categorization Script',fg='white',bg='#3b84f8')
 lbl_filename = Label(master=frame2,text='No File Chosen',fg='grey',width=20,anchor='w')
 lbl_message = Label(master=frame6,text='*Please upload a file',bg='white', fg='#3b84f8')
 
 btn_choosefile = Button(master=frame2,text='Choose File',command=open_xfile, fg = "white", font = "Future 10", bg="#3b84f8")
-# btn_start = Button(master=frame2,text='Start',command=start)
-# btn_preview = Button(master=frame2,text='Preview',command=preview)
-# btn_download = Button(master=frame3,text='Download',command=download)
 
 progress_bar = Progressbar(master=frame3, orient=HORIZONTAL, length=500, mode='determinate')
-
-# scroll_bar = Scrollbar(master=frame5, orient='horizontal')
 
 # pack widgets
 lbl_title.pack(padx=20,pady=20)
@@ -279,8 +241,6 @@ lbl_filename.grid(sticky='w',row=0,column=1,padx=10,pady=10)
 lbl_message.pack(pady=5)
 
 btn_choosefile.grid(sticky='w',row=0,column=0,padx=10,pady=10)
-# btn_start.grid(sticky='w',row=1,column=1,padx=10,pady=10)
-# btn_preview.grid(sticky='w',row=1,column=0,padx=10,pady=10)
 
 progress_bar.pack(padx=10,pady=20,expand=True)
 
