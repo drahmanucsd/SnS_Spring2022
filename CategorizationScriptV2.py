@@ -20,6 +20,7 @@ import csv
 import ntpath
 import pandas as pd
 
+#a
 # variables
 new_rows = []
 item_type = []
@@ -74,8 +75,6 @@ frame2 = Frame(bg='#ffffff') # holds the choose file, preview, and start buttons
 frame2.pack()
 frame3 = Frame(bg='#ffffff') # holds the progress bar
 frame3.pack(fill='x')
-# frame5 = Frame(bg='#ffffff') # holds the scroll bar and frame 4
-# frame5.pack()
 
 
 # initialize xfile as a global variable
@@ -87,10 +86,7 @@ def open_xfile():
     global xfile
     xfile = filedialog.askopenfilename(title='open a file',filetypes=(('excel files','*.xls'),('excel files','*.xlsx')))
     filename = ''
-    # if len(ntpath.basename(xfile)) > 25:
-    #     filename = ntpath.basename(csv_file)[:25]+'...'
-    # else:
-    #     filename = ntpath.basename(xfile)
+
     filename = ntpath.basename(xfile)
     lbl_filename.config(text=filename,fg='grey')
     start()
@@ -156,6 +152,7 @@ def categorize_revenue():
                  
             else:
                 member_IDs.append(id)
+                
                 xfile.at[idx, 'Item Type'] = 'Membership - New'
                 
             
@@ -174,7 +171,6 @@ def categorize_revenue():
             
         elif any(cat in service for cat in deletions):
             xfile.at[idx, 'Item Type'] = 'DELETE'
-            # xfile.drop(xfile.index[idx])
         
         elif any(cat in service for cat in consults):
             xfile.at[idx, 'Item Type'] = 'Consultation'
