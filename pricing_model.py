@@ -25,7 +25,7 @@ def worker_cost(cost, travel_dist, travel_rate):
     return cost + travel_dist*travel_rate
 
 # returns cost for tier 1 events
-def tier1_cost(prac_cost=65, conc_cost=25, travel_dist=0, travel_rate=0.585):
+def tier1_cost(prac_cost, conc_cost, travel_dist, travel_rate):
     travel_rate = 0.585
     prac_cost = worker_cost(prac_cost, travel_dist, travel_rate) 
     conc_cost =  worker_cost(conc_cost, travel_dist, travel_rate)
@@ -59,7 +59,7 @@ def kits_cost(kit, num_participants):
     return kit_prices[kit] * num_participants
 
 # returns cost for tier 3 events: 2 practitioners, 1 concierge, med consumables
-def tier3_cost(consum_lst, num_participants, prac_cost1=65, prac_cost2=65, conc_cost=25, travel_dist=0, travel_rate=0.585):
+def tier3_cost(consum_lst, num_participants, prac_cost1, prac_cost2, conc_cost, travel_dist, travel_rate):
     """
     consum_lst: number of medical consumables of each type
     """
