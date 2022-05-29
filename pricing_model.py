@@ -204,6 +204,7 @@ def option_changed(*args):
     entry12.grid_remove()
     label13.grid_remove()
     entry13.grid_remove()
+    t_options.grid_remove()
     tv = tier_var.get()
     if tv == 'Tier 1':
         label1.config(text = 'Practitioner Rate:')
