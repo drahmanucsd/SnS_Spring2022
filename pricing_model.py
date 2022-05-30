@@ -18,7 +18,7 @@ def tier_costs(tier,e1,e2,e3,e4,e5,e6,vl):
     elif (tier == 2):
         return np.round(tier2_cost(e1,e2,e5,e6,e4,e3),2)
     else:
-        return np.round(tier3_cost(vl,e2,e6,e4,e5,e3),2)
+        return np.round(tier3_cost(vl,e2,e6,e6,e4,e5,e3),2)
 
 # returns cost of a practitioner or concierge
 def worker_cost(cost, travel_dist, travel_rate):
@@ -284,50 +284,50 @@ tier_var.set('Select Tier')
 
 
 
-label1 = tk.Label(frame2, text = 'Leave Blank', font=('calibre',10, 'bold'),bg = 'white')
-entry1 = tk.Entry(frame2,textvariable = var1, font=('calibre',10,'normal'),justify='center')
+label1 = tk.Label(frame2, text = 'Leave Blank', font=('calibre',10, 'bold'),bg = 'white',fg ='black')
+entry1 = tk.Entry(frame2,textvariable = var1, font=('calibre',10,'normal'),justify='center',bg = 'white',fg ='black')
 
-label2 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry2=tk.Entry(frame2, textvariable = var2, font = ('calibre',10,'normal'),justify='center')
+label2 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry2=tk.Entry(frame2, textvariable = var2, font = ('calibre',10,'normal'),justify='center',bg = 'white',fg ='black')
 
-label3 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry3=tk.Entry(frame2, textvariable = var3, font = ('calibre',10,'normal'),justify='center')
+label3 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry3=tk.Entry(frame2, textvariable = var3, font = ('calibre',10,'normal'),justify='center',bg = 'white',fg ='black')
 
-label4 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry4=tk.Entry(frame2, textvariable = var4, font = ('calibre',10,'normal'), justify='center')
+label4 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry4=tk.Entry(frame2, textvariable = var4, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
 
-label5 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry5=tk.Entry(frame2, textvariable = var5, font = ('calibre',10,'normal'), justify='center')
+label5 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry5=tk.Entry(frame2, textvariable = var5, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
 
-label6 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry6=tk.Entry(frame2, textvariable = var6, font = ('calibre',10,'normal'), justify='center')
-
-
-label7 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry7=tk.Entry(frame2, textvariable = var7, font = ('calibre',10,'normal'), justify='center')
-
-label8 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry8=tk.Entry(frame2, textvariable = var8, font = ('calibre',10,'normal'), justify='center')
-
-label9 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry9=tk.Entry(frame2, textvariable = var9, font = ('calibre',10,'normal'), justify='center')
-
-label10 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry10=tk.Entry(frame2, textvariable = var10, font = ('calibre',10,'normal'), justify='center')
-
-label11 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry11=tk.Entry(frame2, textvariable = var11, font = ('calibre',10,'normal'), justify='center')
-
-label12 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry12=tk.Entry(frame2, textvariable = var12, font = ('calibre',10,'normal'), justify='center')
-
-label13 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white')
-entry13=tk.Entry(frame2, textvariable = var13, font = ('calibre',10,'normal'), justify='center')
+label6 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry6=tk.Entry(frame2, textvariable = var6, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
 
 
+label7 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry7=tk.Entry(frame2, textvariable = var7, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
 
-outtxt =tk.Label(frame2, text = 'Estimated Cost:', font = ('calibre',10,'bold'),bg ='white')
-outlabel =tk.Label(frame2, text = '', font = ('calibre',10,'bold'),bg = 'white')
+label8 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry8=tk.Entry(frame2, textvariable = var8, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
+label9 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry9=tk.Entry(frame2, textvariable = var9, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
+label10 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry10=tk.Entry(frame2, textvariable = var10, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
+label11 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry11=tk.Entry(frame2, textvariable = var11, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
+label12 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry12=tk.Entry(frame2, textvariable = var12, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
+label13 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry13=tk.Entry(frame2, textvariable = var13, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
+
+
+outtxt =tk.Label(frame2, text = 'Estimated Cost:', font = ('calibre',10,'bold'),bg ='white',fg ='black')
+outlabel =tk.Label(frame2, text = '', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
 # creating a button using the widget
 # Button that will call the submit function
 sub_btn=tk.Button(frame2,text = 'Calculate', command = submit)
