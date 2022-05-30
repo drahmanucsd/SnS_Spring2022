@@ -35,10 +35,10 @@ def tier1_cost(prac_cost=65, conc_cost=25, travel_dist=0, travel_rate=0.585):
 # returns cost for tier 2 events
 def tier2_cost(kit, num_participants, prac_cost, conc_cost, travel_dist, travel_rate):
     kits = kits_cost(kit, num_participants)
-    prac_cost = worker_cost(prac_cost, travel_dist, travel_rate)
-    conc_cost = worker_cost(conc_cost, travel_dist, travel_rate)
+    prac = worker_cost(prac_cost, travel_dist, travel_rate)
+    conc = worker_cost(conc_cost, travel_dist, travel_rate)
 
-    return kits + prac_cost + conc_cost
+    return kits + prac + conc
 
 # returns total cost of all kits given type of kit and num people
 def kits_cost(kit, num_participants):
@@ -67,7 +67,7 @@ def tier3_cost(consum_lst, num_participants, prac_cost1=65, prac_cost2=65, conc_
     prac2 = worker_cost(prac_cost2, travel_dist, travel_rate) 
     conc = worker_cost(prac_cost2, travel_dist, travel_rate) 
 
-    return prac1 + prac2 + med_consum(consum_lst)
+    return prac1 + prac2 + med_consum(consum_lst) + conc
 
 # returns total cost of medical consumables
 def med_consum(consum_lst):
