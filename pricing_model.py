@@ -256,7 +256,7 @@ def option_changed(*args):
         var4.set('25')
         label5.config(text='Travel Distance:')
         var5.set('')
-        label6.config(text='Practitioner #1 Cost:')
+        label6.config(text='Practitioner Cost:')
         var6.set('65')
         label7.config(text='Accupuncture Supplies')
         label7.grid(row=a+2,column=1,pady = '5')
