@@ -65,7 +65,7 @@ def tier3_cost(consum_lst, num_participants, prac_cost1, prac_cost2, conc_cost, 
     """
     prac1 = worker_cost(prac_cost1, travel_dist, travel_rate) 
     prac2 = worker_cost(prac_cost2, travel_dist, travel_rate) 
-    conc = worker_cost(prac_cost2, travel_dist, travel_rate) 
+    conc = worker_cost(conc_cost, travel_dist, travel_rate) 
 
     return prac1 + prac2 + med_consum(consum_lst) + conc
 
