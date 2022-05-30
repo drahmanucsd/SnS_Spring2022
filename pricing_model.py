@@ -9,16 +9,16 @@ from tkinter.ttk import Progressbar
 from tkinter.ttk import Scrollbar
 import os
 import ntpath
-import pandas as pd
+
 
 # returns function that calcualtes cost based on tier
-def tier_costs(tier,e1,e2,e3,e4,e5,e6,vl):
+def tier_costs(tier,e1,e2,e3,e4,e5,e6,vl,e14):
     if (tier == 1):
         return np.round(tier1_cost(e1,e6,e2,e3),2)
     elif (tier == 2):
         return np.round(tier2_cost(e1,e2,e5,e6,e4,e3),2)
     else:
-        return np.round(tier3_cost(vl,e2,e6,e6,e4,e5,e3),2)
+        return np.round(tier3_cost(vl,e2,e6,e14,e4,e5,e3),2)
 
 # returns cost of a practitioner or concierge
 def worker_cost(cost, travel_dist, travel_rate):
@@ -67,7 +67,7 @@ def tier3_cost(consum_lst, num_participants, prac_cost1, prac_cost2, conc_cost, 
     prac2 = worker_cost(prac_cost2, travel_dist, travel_rate) 
     conc = worker_cost(prac_cost2, travel_dist, travel_rate) 
 
-    return prac1 + prac2 + med_consum(consum_lst)
+    return prac1 + prac2 + med_consum(consum_lst)+conc
 
 # returns total cost of medical consumables
 def med_consum(consum_lst):
@@ -107,6 +107,7 @@ var10=tk.StringVar()
 var11=tk.StringVar()
 var12=tk.StringVar()
 var13=tk.StringVar()
+var14=tk.StringVar()
 tier_var = tk.StringVar()
 t_o_var = tk.StringVar()
 
@@ -129,11 +130,13 @@ def submit():
         v1= var1.get()
         v4 = '0'
         v5 = '0'
+        v14 = '0'
     elif tier_var.get() == 'Tier 2':
         t =2
         v1 = t_o_var.get()
         v4= var4.get()
         v5 = var5.get()
+        v14 = '0'
         if v1 == 'Herb Garder: Food As Medicine':
             v1 = '0'
         elif v1 == 'Botanical Beverages':
@@ -155,6 +158,7 @@ def submit():
         v1 = '0'
         v4= var4.get()
         v5 = var5.get()
+        v14 = var14.get()
         try:
             v7 = int(var7.get())
             v8 = int(var8.get())
@@ -166,13 +170,13 @@ def submit():
             vl = (v7,v8,v9,v10,v11,v12,v13)
         except:
             failtxt = "Incorrect Kit Quantity"
-    if v1 == '' or var2.get() == '' or var3.get()=='' or v4 =='' or v5==''or failtxt =='Incorrect Kit Quanity' or var6.get() == '':
+    if v1 == '' or var2.get() == '' or var3.get()=='' or v4 =='' or v5==''or failtxt =='Incorrect Kit Quanity' or var6.get() == '' or v14 == '':
         outtxt.config(text=failtxt, fg='red')
     else:
-        a= (tier_costs(t,int(v1),int(var2.get()),float(var3.get()),int(v4),int(v5),int(var6.get()),vl))
+        a= (tier_costs(t,int(v1),int(var2.get()),float(var3.get()),int(v4),int(v5),int(var6.get()),vl,int(v14)))
         outlabel.config(text= a)
         outtxt.config(text='Estimated Cost:',fg = 'black')
-    outtxt.grid(row=15, column=0,pady='10')
+    outtxt.grid(row=17, column=0,pady='10')
 
 
 def option_changed(*args):
@@ -204,6 +208,8 @@ def option_changed(*args):
     entry12.grid_remove()
     label13.grid_remove()
     entry13.grid_remove()
+    label14.grid_remove()
+    entry14.grid_remove()
     t_options.grid_remove()
     tv = tier_var.get()
     if tv == 'Tier 1':
@@ -269,6 +275,10 @@ def option_changed(*args):
         label13.config(text='Acu Sup for Pop up Lounge')
         label13.grid(row=a+14,column=1,pady = '5')
         entry13.grid(row=a+15, column=1)
+        label14.config(text='Practitioner Rate #2:')
+        label14.grid(row=a+14,column=0,pady = '5')
+        entry14.grid(row=a+15, column=0)
+        var14.set('25')
 
     
 	
@@ -324,6 +334,9 @@ entry12=tk.Entry(frame2, textvariable = var12, font = ('calibre',10,'normal'), j
 label13 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
 entry13=tk.Entry(frame2, textvariable = var13, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
 
+label14 = tk.Label(frame2, text = 'Leave Black', font = ('calibre',10,'bold'),bg = 'white',fg ='black')
+entry14=tk.Entry(frame2, textvariable = var14, font = ('calibre',10,'normal'), justify='center',bg = 'white',fg ='black')
+
 
 
 outtxt =tk.Label(frame2, text = 'Estimated Cost:', font = ('calibre',10,'bold'),bg ='white',fg ='black')
@@ -341,9 +354,9 @@ sub_btn=tk.Button(frame2,text = 'Calculate', command = submit)
 a = 0
 
 option_menu.grid(row= a+1, column=0,pady='10')
-sub_btn.grid(row=a+14,column=0,pady='20')
+sub_btn.grid(row=a+16,column=0,pady='20')
 
-outlabel.grid(row=a+16, column=0)
+outlabel.grid(row=a+18, column=0)
 
 # performing an infinite loop
 # for the window to display
